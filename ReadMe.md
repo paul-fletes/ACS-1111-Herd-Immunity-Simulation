@@ -1,5 +1,7 @@
 # Final Project: Herd Immunity Simulation
+<i> submitted by Paul Fletes </i>
 
+## Project Overview
 _Imagine you have been hired at a new startup focused on health and medicine --- and the World Health Organization needs your skills as programmatic pandemic simulation specialist!_
 
 **Your job is to create a simulation of herd immunity by modeling how a virus moves through a population where some (but not all) of a population is vaccinated against a virus.**
@@ -104,7 +106,7 @@ Let's look at an example:
 
   in the terminal.
 
-### Basic Structure
+### Project File Structure
 
 The program consists of 4 classes: `Person`, `Virus`, `Simulation`, and `Logger`.
 
