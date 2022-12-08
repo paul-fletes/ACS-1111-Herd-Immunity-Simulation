@@ -169,7 +169,7 @@ class Simulation(object):
     def person_randomizer(self):
         random_person = random.choice(self.population)
         while random_person.is_alive == False:
-            random_person = random.chouce(self.population)
+            random_person = random.choice(self.population)
             random_person = random.choice(self.population)
             self.logger.log_person_randomizer(
                 random_person._id, random_person.is_vaccinated, random_person.infection)
@@ -199,10 +199,13 @@ class Simulation(object):
         pass
 
     def _infect_newly_infected(self):
-        # for id in self.newly_infected:
-        #     for person in self.population:
-        #         if person._id == id:
-        #             person.infection = self.virus
+        for infected_person in self.newly_infected:
+            for person in self.population:
+                if person._id == infected_person._id:
+                    person.infection = self.virus
+            self.newly_infected = []
+            for person in self.newly_infected:
+                print(person._id)
 
         # self.newly_infected = []
         # TODO: Call this method at the end of every time step and infect each Person.
