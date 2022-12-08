@@ -63,6 +63,7 @@ def infection_survival_test():
     assert test_infection_person.is_alive is True
     assert test_infection_person.is_vaccinated is False
     assert test_infection_person.infection is virus
+
     survival_chance = test_infection_person.did_survive_infection()
     if survival_chance:
         assert test_infection_person.is_alive is True
