@@ -19,6 +19,7 @@ class Simulation(object):
 
         self.current_vaccinated = 0
         self.current_infected = 0
+        self.current_deaths = 0
 
         self.total_alive = 0
         self.total_dead = 0
@@ -43,10 +44,10 @@ class Simulation(object):
         # Infected
         infected_group = self.initial_infected
 
-        # Testing
-        print(f"Vaccinated: {vaccinated_group}")
-        print(f"Unvaccinated: {unvaccinated_group}")
-        print(f"Infected: {infected_group}")
+        # # Testing
+        # print(f"Vaccinated: {vaccinated_group}")
+        # print(f"Unvaccinated: {unvaccinated_group}")
+        # print(f"Infected: {infected_group}")
 
         id_num = 0
         for num in range(vaccinated_group):
@@ -67,6 +68,8 @@ class Simulation(object):
         print(f"Total population: {int(self.pop_size)}")
         self.logger.write_metadata(
             self.pop_size, self.vacc_percentage, virus.name, virus.mortality_rate, virus.repro_rate)
+        self.logger.log_create_population(
+            vaccinated_group, unvaccinated_group, infected_group)
         return start_population
 
     def _simulation_should_continue(self):
@@ -76,28 +79,51 @@ class Simulation(object):
         # or if all of the living people have been vaccinated.
         # TODO: Loop over the list of people in the population. Return True
         # if the simulation should continue or False if not.
+        sim_check_dead = 0
+        sim_check_vaccinated = 0
+        sim_check_alive = 0
+        for person in self.population:
+            if person.is_alive == False:
+                sim_check_dead += 1
+            if person.is_vaccinated == True:
+                sim_check_vaccinated += 1
+            if person.is_alive == True:
+                sim_check_alive += 1
+
+        self.logger.log_simulation_should_continue(
+            sim_check_dead, sim_check_vaccinated, sim_check_alive)
+
+        if sim_check_dead == self.pop_size or sim_check_vaccinated == self.pop_size:
+            return False
+        else:
+            return True
+
+        # This method will return a booleanb indicating if the simulation
+        # should continue.
+        # The simulation should not continue if all of the people are dead,
+        # or if all of the living people have been vaccinated.
+        # TODO: Loop over the list of people in the population. Return True
+        # if the simulation should continue or False if not.
         pass
 
     def run(self):
+        print(f"Simulation started. Please click on the log to view updates")
         # This method starts the simulation. It should track the number of
         # steps the simulation has run and check if the simulation should
         # continue at the end of each step.
 
-        print('run check')
-        time_step_counter = 0
+        self.time_step_counter = 0
         should_continue = True
 
         while should_continue:
-            #     self.time_step()
-            #     should_continue = self._simulation_should_continue()
-            #     self.time_step_counter += 1
-            # print("testing end of runtime")
             # TODO: Increment the time_step_counter
             # TODO: for every iteration of this loop, call self.time_step()
             # Call the _simulation_should_continue method to determine if
             # the simulation should continue
+            self.time_step()
             should_continue = self._simulation_should_continue()
-            pass
+            self.time_step_counter += 1
+        print(f"Simulation complete after {self.time_step} steps.")
 
         # TODO: Write meta data to the logger. This should be starting
         # statistics for the simulation. It should include the initial
@@ -107,29 +133,27 @@ class Simulation(object):
         # the logger. Send the final data to the logger.
 
     def time_step(self):
-        # time_step_deaths = 0
-        # for person in self.population:
-        #     if person.infection != None and person.is_alive == True:
-        #         counter = 0
-        #         while counter < 100:
-        #             random_person = random.choice(self.population)
-        #             self.interaction(person, random_person)
-        #             counter += 1
-        #         if person.did_survive_infection() == True:
-        #             person.infection = None
-        #             person.is_vaccinated = True
-        #             self.current_infected -= 1
-        #             self. current_vaccinated += 1
-        #         else:
-        #             self.total_dead += 1
-        #             self.total_infected -= 1
-        #             time_step_deaths += 1
-        #             person.is_alive = False
+        for person in self.population:
+            if person.infection == self.virus and person.is_alive == True:
+                counter = 0
+                while counter < 100:
+                    randomized_person = self.person_randomizer()
+                    self.interaction(person, randomized_person)
+                    counter += 1
+                if person.did_survive_infection() == True:
+                    person.is_vaccinated = True
+                    person.infection = None
+                    self.current_infected -= 1
+                    self. current_vaccinated += 1
+                else:
+                    self.total_dead += 1
+                    self.total_infected -= 1
+                    self.current_deaths += 1
 
-        # total_alive = self.pop_size - self.total_dead
-        # print(f"Total alive: {total_alive}")
-        # print(f"Current Infected: {self.current_infected}")
-        # print(f"Current Vaccinated: {self.current_vaccinated}")
+        self.total_alive = self.pop_size - self.total_dead
+        self.logger.log_time_step(self.time_step_counter, self.total_alive, self.total_infected,
+                                  self.total_dead, self.current_infected, self.current_deaths)
+        self.current_deaths = 0
 
         # This method will simulate interactions between people, calulate
         # new infections, and determine if vaccinations and fatalities from infections
@@ -142,18 +166,24 @@ class Simulation(object):
         # takes the infected person and a random person
         pass
 
+    def person_randomizer(self):
+        random_person = random.choice(self.population)
+        while random_person.is_alive == False:
+            random_person = random.chouce(self.population)
+            random_person = random.choice(self.population)
+            self.logger.log_person_randomizer(
+                random_person._id, random_person.is_vaccinated, random_person.infection)
+        return random_person
+
     def interaction(self, infected_person, random_person):
         # TODO: Finish this method.
-        # assert infected_person.is_alive == True
-        # assert random_person.is_alive == True
 
-        # if random_person.is_vaccinated == True or random_person.infection != None:
-        #     pass
-        # elif random_person.is_vaccinated == False and random_person.infection == None:
-        #     if random.random() < infected_person.infection.repro_rate:
-        #         if random_person._id not in self.newly_infected:
-        #             self.newly_infected.append(random_person._id)
-        #             self.total_infected += 1
+        if random_person.is_alive == True:
+            if random_person.is_vaccinated == False and random_person.infection == None:
+                chance_of_infection = random.random()
+                if chance_of_infection < virus.repro_rate:
+                    self.newly_infected.append(random_person)
+                    self.total_infected += 1
 
         # The possible cases you'll need to cover are listed below:
         # random_person is vaccinated:
