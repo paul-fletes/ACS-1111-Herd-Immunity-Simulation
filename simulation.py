@@ -18,16 +18,18 @@ class Simulation(object):
         self.pop_size = pop_size
         self.vacc_percentage = vacc_percentage
         self.initial_infected = initial_infected
-        self. people = []
-        self._create_population()
-        # You need to store a list of people (Person instances)
-        # Some of these people will be infected some will not.
-        # Use the _create_population() method to create the list and
-        # return it storing it in an attribute here.
-        # TODO: Call self._create_population() and pass in the correct parameters.
-        pass
+
+        self.population = self._create_population()
 
     def _create_population(self):
+        start_population = []
+
+        vaccinated_group = self.pop_size * self.vacc_percentage
+        vaccinated_group = int(vaccinated_group)
+        self.current_vaccinated = vaccinated_group
+
+        unvaccinated_group = self.pop_size - self.initial_infected - vaccinated_group
+
         # TODO: Create a list of people (Person instances). This list
         # should have a total number of people equal to the pop_size.
         # Some of these people will be uninfected and some will be infected.
@@ -112,9 +114,6 @@ if __name__ == "__main__":
     pop_size = 1000
     vacc_percentage = 0.1
     initial_infected = 10
-
-    # Make a new instance of the imulation
-    virus = Virus(virus, pop_size, vacc_percentage, initial_infected)
-    sim = Simulation(pop_size, vacc_percentage, initial_infected, virus)
+    sim = Simulation(virus, pop_size, vacc_percentage, initial_infected)
 
     # sim.run()
