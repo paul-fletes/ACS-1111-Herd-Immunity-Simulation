@@ -9,11 +9,25 @@ class Virus(object):
         pass
 
 
-# Test this class
-if __name__ == "__main__":
-    # Test your virus class by making an instance and confirming
-    # it has the attributes you defined
+def test_virus():
     virus = Virus("HIV", 0.8, 0.3)
     assert virus.name == "HIV"
     assert virus.repro_rate == 0.8
     assert virus.mortality_rate == 0.3
+    print(virus.name, virus.repro_rate, virus.mortality_rate)
+
+
+def test_virus():
+    virus = Virus("Influenza", 0.8, 0.3)
+    assert virus.name == "Influenza"
+    assert virus.repro_rate == 0.9
+    assert virus.mortality_rate == 0.05
+    print(virus.name, virus.repro_rate, virus.mortality_rate)
+
+
+def test_virus():
+    virus = Virus("Smallpox", 0.8, 0.3)
+    assert virus.name == "Smallpox"
+    assert virus.repro_rate == 0.6
+    assert virus.mortality_rate == 0.1
+    print(virus.name, virus.repro_rate, virus.mortality_rate)
