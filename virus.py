@@ -6,7 +6,6 @@ class Virus(object):
         # TODO Define the other attributes of Virus
         self.repro_rate = repro_rate
         self.mortality_rate = mortality_rate
-        pass
 
 
 def test_virus():
@@ -16,18 +15,17 @@ def test_virus():
     assert virus.mortality_rate == 0.3
     print(virus.name, virus.repro_rate, virus.mortality_rate)
 
+    flu = Virus("Influenza", 0.9, 0.05)
+    assert flu.name == "Influenza"
+    assert flu.repro_rate == 0.9
+    assert flu.mortality_rate == 0.05
+    print(flu.name, flu.repro_rate, flu.mortality_rate)
 
-def test_virus():
-    virus = Virus("Influenza", 0.8, 0.3)
-    assert virus.name == "Influenza"
-    assert virus.repro_rate == 0.9
-    assert virus.mortality_rate == 0.05
-    print(virus.name, virus.repro_rate, virus.mortality_rate)
+    smallpox = Virus("Smallpox", 0.6, 0.1)
+    assert smallpox.name == "Smallpox"
+    assert smallpox.repro_rate == 0.6
+    assert smallpox.mortality_rate == 0.1
+    print(smallpox.name, smallpox.repro_rate, smallpox.mortality_rate)
 
 
-def test_virus():
-    virus = Virus("Smallpox", 0.8, 0.3)
-    assert virus.name == "Smallpox"
-    assert virus.repro_rate == 0.6
-    assert virus.mortality_rate == 0.1
-    print(virus.name, virus.repro_rate, virus.mortality_rate)
+test_virus()
